@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../HashTable/HashTable.h"
+#include "HashTable.h"
 #include <bitset>
 
 int main() {
