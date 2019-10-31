@@ -5,16 +5,19 @@
 #include <cmath>
 #include <numeric>
 #include <vector>
+#include <string>
 
 using namespace std;
 
 namespace ht {
-	
+	// extern Node *head;
+	extern l_list::Node head;
 	void ht::add(std::string id) {
 		if (ht::hashing_method == 1) {
 			universal(id);
 		}
 		else if (ht::hashing_method == 2) {
+
 			division(id);
 		}
 		else if (ht::hashing_method == 3) {
@@ -117,7 +120,20 @@ namespace ht {
 
 	int ht::division(std::string id) {
 		cout << "division: " << id << endl;
+		std::bitset<ht::hash_size> b(TextToBinaryString(id));
+		int idx = b.to_ullong() % ht::table_size;
+		cout << " " << idx << endl;
+		ht::lists[idx].insert(id);
+		ht::lists[idx].display();
 		return 0;
+	}
+
+	std::string ht::TextToBinaryString(std::string words) {
+		std::string binaryString = "";
+		for (char& _char : words) {
+			binaryString +=std::bitset<8>(_char).to_string();
+		}
+		return binaryString;
 	}
 
 	int ht::multiplication(std::string id) {
@@ -149,5 +165,41 @@ namespace ht {
 			}
 		}
 	}
+	
+	int l_list::search_node(string text){
+            struct Node* ptr;
+            ptr = head;
+            while (ptr != NULL) { 
+                if (ptr->text == text)
+                {
+                    cout << text << " already in the list" << endl;
+                    return 1;
+                }
+                ptr = ptr->next; 
+            }
+            return 0;
+        }
+
+        void l_list::insert(string new_data) { 
+            if (l_list::search_node(new_data))
+            {
+                cout << "That entry already exists" << endl;
+            }else
+            {
+                struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
+                new_node->text = new_data; 
+                new_node->next = head; 
+                head = new_node; 
+            } 
+        } 
+
+        void l_list::display() { 
+        struct Node* ptr;
+        ptr = head;
+        while (ptr != NULL) { 
+            cout<< ptr->text << endl; 
+            ptr = ptr->next; 
+        } 
+        } 
 
 }
