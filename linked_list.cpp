@@ -1,13 +1,14 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 
 class linked_list{
 
-    struct Node { 
-    string text; 
-    struct Node *next; 
+    struct Node {
+        string text; 
+        struct Node *next; 
     }; 
     struct Node* head = NULL;
 
@@ -27,16 +28,17 @@ class linked_list{
             return 0;
         }
 
-        void insert(string new_data) { 
+        int insert(string new_data) { 
             if (search_node(new_data))
             {
-                cout << "That entry already exists" << endl;
+                return 0;
             }else
             {
-                struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
+                Node* new_node = new Node();
                 new_node->text = new_data; 
                 new_node->next = head; 
                 head = new_node; 
+                return 1;
             } 
         } 
 

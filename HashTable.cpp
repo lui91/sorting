@@ -11,7 +11,6 @@ using namespace std;
 
 namespace ht {
 	// extern Node *head;
-	extern l_list::Node head;
 	void ht::add(std::string id) {
 		if (ht::hashing_method == 1) {
 			universal(id);
@@ -123,8 +122,14 @@ namespace ht {
 		std::bitset<ht::hash_size> b(TextToBinaryString(id));
 		int idx = b.to_ullong() % ht::table_size;
 		cout << " " << idx << endl;
-		ht::lists[idx].insert(id);
-		ht::lists[idx].display();
+		int status = ht::listas[idx].insert(id);
+		if (status)
+		{
+			cout << id << " added to de idx " << idx << endl;
+		}else
+		{
+			cout << "That entry already exists" << endl;
+		}
 		return 0;
 	}
 
@@ -155,8 +160,6 @@ namespace ht {
 		return b;
 	}
 
-	
-
 	void ht::generate_matrix()
 	{
 		for (int i = 0; i < ht::b_size; ++i) {
@@ -165,41 +168,5 @@ namespace ht {
 			}
 		}
 	}
-	
-	int l_list::search_node(string text){
-            struct Node* ptr;
-            ptr = head;
-            while (ptr != NULL) { 
-                if (ptr->text == text)
-                {
-                    cout << text << " already in the list" << endl;
-                    return 1;
-                }
-                ptr = ptr->next; 
-            }
-            return 0;
-        }
-
-        void l_list::insert(string new_data) { 
-            if (l_list::search_node(new_data))
-            {
-                cout << "That entry already exists" << endl;
-            }else
-            {
-                struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
-                new_node->text = new_data; 
-                new_node->next = head; 
-                head = new_node; 
-            } 
-        } 
-
-        void l_list::display() { 
-        struct Node* ptr;
-        ptr = head;
-        while (ptr != NULL) { 
-            cout<< ptr->text << endl; 
-            ptr = ptr->next; 
-        } 
-        } 
 
 }
