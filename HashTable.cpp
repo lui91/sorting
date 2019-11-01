@@ -1,5 +1,3 @@
-// HashTable.cpp : Defines the functions for the static library.
-//
 #include "HashTable.h"
 #include <iostream>
 #include <cmath>
@@ -10,7 +8,6 @@
 using namespace std;
 
 namespace ht {
-	// extern Node *head;
 	void ht::add(std::string id) {
 		if (ht::hashing_method == 1) {
 			universal(id);
@@ -27,7 +24,7 @@ namespace ht {
 	int ht::universal(std::string id) {
 		cout << "universal:" << id << endl;
 		
-		bitset<ht::hash_size> w(ht::str_to_bits(id));
+		bitset<ht::hash_size> w(bp.str_to_bits(id));
 		// M must be power of 2
 		//TODO: repair 3 dimensions array
 		cout << "bits size: " << w << endl;
@@ -41,7 +38,6 @@ namespace ht {
 			}
 			
 		}
-
 		return 0;
 	}
 
@@ -62,7 +58,7 @@ namespace ht {
 
 		cout << "row: " << row << endl;
 		cout << "bits: " << bits << endl;
-		ht::sum(row, bits);
+		bp.bitsetAdd(row, bits);
 		//ht::subtraction(row, bits);
 		//i = i + ((i >> 1) & cinco);
 
@@ -72,23 +68,6 @@ namespace ht {
 		return 0;
 	}
 
-	void ht::sum(bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits)
-	{
-		std::bitset<ht::hash_size> const m("1");
-		std::bitset<ht::hash_size> result;
-		for (auto i = 0; i < result.size(); ++i) {
-			std::bitset<ht::hash_size> const diff(((row >> i)& m).to_ullong() + ((bits >> i)& m).to_ullong() + (result >> i).to_ullong());
-			result ^= (diff ^ (result >> i)) << i;
-		}
-		cout << "sum: " << result << endl;
-	}
-
-	void ht::subtraction(std::bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits)
-	{
-		//int d_row = ht::decimal(row);
-
-
-	}
 
 	long long ht::Binary(int num)
 	{
@@ -142,22 +121,13 @@ namespace ht {
 	}
 
 	int ht::multiplication(std::string id) {
-		cout << "multiplication" << endl;
+		std::bitset<ht::hash_size> b(TextToBinaryString(id));
+		std::bitset<ht::hash_size> m(128);
+		const float A =  0.5;
+		bp.bitsetMultiply(b,m);
+		std::bitset<ht::hash_size> idx(bp.extracted_bits(b));
+		// cout << "extracted " << idx.to_string() << endl;
 		return 0;
-	}
-
-	std::bitset<ht::hash_size> ht::str_to_bits(std::string word) {
-		std::bitset<ht::hash_size> b;
-		for (int i = 0; i < word.length(); ++i) {
-			char c = word[i];
-			for (int j = 7; j >= 0 && c; --j) {
-				if (c & 0x1) {
-					b.set(8 * i + j);
-				}
-				c >>= 1;
-			}
-		}
-		return b;
 	}
 
 	void ht::generate_matrix()

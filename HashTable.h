@@ -1,6 +1,7 @@
 #include <string>
 #include <bitset>
 #include "linked_list.cpp"
+#include "binaryoperations.cpp"
 
 namespace ht {
 	class ht {
@@ -22,19 +23,15 @@ namespace ht {
 		static const int b_size = 64;
 		std::bitset<ht::hash_size> random_matrix[b_size][u_size];
 		linked_list listas[ht::table_size];
-
+		binaryoperations bp;
 		void add(std::string id);
 		int universal(std::string id);
 		int dot_product(std::bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits);
-		void sum(std::bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits);
-		void subtraction(std::bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits);
 		long long Binary(int num);
 		int decimal(long long num);
 		int division(std::string id);
 		int multiplication(std::string id);
-		std::bitset<ht::hash_size> str_to_bits(std::string word);
 		std::string TextToBinaryString(std::string words);
-		
 		
 	private:
 		void generate_matrix();
