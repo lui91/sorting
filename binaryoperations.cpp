@@ -1,5 +1,6 @@
 #include <bitset>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -8,7 +9,9 @@ class binaryoperations
 private:
     /* data */
 public:
+    
     static const int hash_size = 128;
+    static const int bits2extract = 7;
 
     bool fullAdder(bool b1, bool b2, bool& carry)
     {
@@ -42,11 +45,10 @@ public:
         }
     }
 
-    template<unsigned int N>
     void bitsetSubtract(std::bitset<hash_size>& x, const std::bitset<hash_size>& y)
     {
         bool borrow = false;
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < hash_size; i++)
         {
             if (borrow)
             {
@@ -108,19 +110,49 @@ public:
         return b;
     }
 
-    std::bitset<hash_size> extracted_bits(std::bitset<hash_size> num){
+    int extracted_bits(std::bitset<hash_size> num){
         int mid = hash_size /2;
-        int bits2extract = 7;
-        std::bitset<hash_size> idx;
-        cout << num.to_string() << endl << "extracted: ";
-        for (size_t i = mid; i < mid+bits2extract; i++)
-        {
-            idx.set(i, num[i]);
-            cout << num[i];
-        }
-        cout << endl;
-        cout << idx.to_string() << endl;
-        return idx;
+        string bits;
+        string id = num.to_string();
+        bits.append(id.begin()+ mid, id.begin()+ mid + bits2extract);
+        std::bitset<bits2extract> bit_idx(bits);
+        int val = bit_idx.to_ulong();
+        return val;
     }
-};
+    
+    std::string TextToBinaryString(std::string words) {
+		std::string binaryString = "";
+		for (char& _char : words) {
+			binaryString +=std::bitset<8>(_char).to_string();
+		}
+		return binaryString;
+	}
 
+    long long to_binary(int num)
+	{
+		int rem;
+		long long binary = 0, i = 1;
+		do
+		{
+			rem = num % 2;
+			binary = binary + (i * rem);
+			num = num / 2;
+			i = i * 10;
+		} while (num > 0);
+		return binary;
+	}
+
+	int to_decimal(long long num)
+	{
+		int rem, decimal = 0, i = 0;
+		while (num > 0)
+		{
+			rem = num % 10;
+			decimal = decimal + (rem * pow(2, i));
+			i++;
+			num /= 10;
+		}
+		return decimal;
+	}
+
+};

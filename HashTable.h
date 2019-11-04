@@ -16,7 +16,7 @@ namespace ht {
 			
 		}
 
-		static const int table_size = 50;
+		static const int table_size = 100;
 		int hashing_method;
 		static const int hash_size=128;
 		static const int u_size = ht::hash_size;
@@ -26,12 +26,11 @@ namespace ht {
 		binaryoperations bp;
 		void add(std::string id);
 		int universal(std::string id);
-		int dot_product(std::bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits);
+		string dot_product(std::bitset<ht::hash_size> row, std::bitset<ht::hash_size> bits);
 		long long Binary(int num);
 		int decimal(long long num);
 		int division(std::string id);
 		int multiplication(std::string id);
-		std::string TextToBinaryString(std::string words);
 		
 	private:
 		void generate_matrix();

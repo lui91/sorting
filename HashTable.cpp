@@ -1,9 +1,9 @@
 #include "HashTable.h"
 #include <iostream>
-#include <cmath>
 #include <numeric>
 #include <vector>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -24,109 +24,77 @@ namespace ht {
 	int ht::universal(std::string id) {
 		cout << "universal:" << id << endl;
 		
-		bitset<ht::hash_size> w(bp.str_to_bits(id));
+		bitset<ht::hash_size> w(bp.TextToBinaryString(id));
 		// M must be power of 2
-		//TODO: repair 3 dimensions array
-		cout << "bits size: " << w << endl;
 		
-		int product[ht::u_size];
-		for (size_t i = 0; i < 1; i++)
+		string product;
+		for (size_t i = 0; i < b_size; i++)
 		{
-			for (size_t j = 0; j < 1; j++)
+			for (size_t j = 0; j < u_size; j++)
 			{
-				product[i] = dot_product(ht::random_matrix[i][j], w);
+				product.append(dot_product(ht::random_matrix[i][j], w));
 			}
 			
 		}
+		bitset<ht::hash_size> bits(product);
+		cout << "product " << bits.to_ulong() << endl;
+		
 		return 0;
 	}
 
-	int ht::dot_product(bitset<ht::hash_size> row, bitset<ht::hash_size> bits)
+	string ht::dot_product(bitset<ht::hash_size> row, bitset<ht::hash_size> bits)
 	{
 		bitset<ht::hash_size> i(row & bits);
-		bitset<ht::hash_size> cinco(01010101);
-		bitset<ht::hash_size> tres(00110011);
-		long long tres_i = 01010101;
-		long long tres_l = 00110011;
-		long long cinco_l = 01010101;
-		
-		unsigned int tresi = tres_i & tres_i;
-		cout << "tresi: " << tresi << endl;
-		cout << "tres_l: " << tres_l << endl;
-		long long tresl = tres_l + cinco_l;
-		cout << "tresl: " << tresl << endl;
-
-		cout << "row: " << row << endl;
-		cout << "bits: " << bits << endl;
-		bp.bitsetAdd(row, bits);
-		//ht::subtraction(row, bits);
-		//i = i + ((i >> 1) & cinco);
-
-		//int total = ht::random_matrix[row][0] & bits;
-
-
-		return 0;
-	}
-
-
-	long long ht::Binary(int num)
-	{
-		int rem;
-		long long binary = 0, i = 1;
-		do
-		{
-			rem = num % 2;
-			binary = binary + (i * rem);
-			num = num / 2;
-			i = i * 10;
-		} while (num > 0);
-		return binary;
-	}
-
-	int ht::decimal(long long num)
-	{
-		int rem, decimal = 0, i = 0;
-		while (num > 0)
-		{
-			rem = num % 10;
-			decimal = decimal + (rem * pow(2, i));
-			i++;
-			num /= 10;
-		}
-		return decimal;
+		bitset<ht::hash_size> cinco("1010101010101010101010101010101");
+		bitset<ht::hash_size> tres("110011001100110011001100110011");
+		bitset<ht::hash_size> F("11110000111100001111000011110000");
+		bitset<ht::hash_size> zero_uno("1000000010000000100000001");
+		bitset<ht::hash_size> uno("1");
+		i = (i >> 1) & cinco;
+		i = i & tres;
+		bp.bitsetAdd((i), (i >> 2)) ;
+		i = i & tres;
+		bp.bitsetAdd(i, (i>>4));
+		i = i & F;
+		bp.bitsetMultiply(i, zero_uno);
+		i = i >> 24;
+		i = i & i & uno;
+		int idx = bp.to_decimal(i.to_ullong());
+		std::stringstream ss;
+		ss << idx;
+		return ss.str();
 	}
 
 	int ht::division(std::string id) {
-		cout << "division: " << id << endl;
-		std::bitset<ht::hash_size> b(TextToBinaryString(id));
-		int idx = b.to_ullong() % ht::table_size;
-		cout << " " << idx << endl;
+		string test = bp.TextToBinaryString(id);
+		std::bitset<ht::hash_size> b(test);
+		unsigned long long idx =  b.to_ullong() % ht::table_size;
 		int status = ht::listas[idx].insert(id);
 		if (status)
 		{
-			cout << id << " added to de idx " << idx << endl;
+			cout << "division hashing idx:  " << idx << endl;
 		}else
 		{
 			cout << "That entry already exists" << endl;
 		}
+		
 		return 0;
 	}
 
-	std::string ht::TextToBinaryString(std::string words) {
-		std::string binaryString = "";
-		for (char& _char : words) {
-			binaryString +=std::bitset<8>(_char).to_string();
-		}
-		return binaryString;
-	}
-
 	int ht::multiplication(std::string id) {
-		std::bitset<ht::hash_size> b(TextToBinaryString(id));
-		std::bitset<ht::hash_size> m(128);
+		std::bitset<ht::hash_size> b(bp.TextToBinaryString(id));
+		std::bitset<ht::hash_size> m(hash_size);
 		const float A =  0.5;
 		bp.bitsetMultiply(b,m);
-		std::bitset<ht::hash_size> idx(bp.extracted_bits(b));
-		// cout << "extracted " << idx.to_string() << endl;
+		int idx = bp.extracted_bits(b);
+		int status = ht::listas[idx].insert(id);
+		if (status)
+		{
+			cout << "multiplication hashing idx:  " << idx << endl;
+		}else
+		{
+			cout << "That entry already exists" << endl;
+		}
 		return 0;
 	}
 
