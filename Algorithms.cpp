@@ -1,6 +1,7 @@
 #include <iostream>
 #include "HashTable.h"
 #include <bitset>
+#include "heaps.cpp"
 
 int main() {
 	string id = "luis";
@@ -19,5 +20,22 @@ int main() {
     }
 
 	ht2.listas[0].display();
+
+	srand (2);
+    init_vector();
+    std::cout << "originales: ";
+    for (size_t i = 1; i <= max_heap.N; i++) {
+        std::cout  << max_heap.numbers[i] << ' ';
+    }
+
+    std::cout << std::endl;
+    build_max_heap(max_heap, max_heap.N);
+    std::cout << std::endl;
+
+    std::cout << "ordenados: ";
+    for (size_t i = 1; i <= max_heap.N; i++) {
+        std::cout << max_heap.numbers[i] << ' ';
+    }
+
 	return 0;
 }
